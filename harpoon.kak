@@ -1,4 +1,5 @@
-declare-option -hidden str harpoon_path %sh{ dirname $kak_source }
+require-module luar
+
 declare-option str-to-str-map harpoon_buffers
 
 define-command -params 1 -docstring "Navigate to the file at the specified index" harpoon-nav %{
