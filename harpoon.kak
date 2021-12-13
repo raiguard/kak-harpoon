@@ -43,11 +43,11 @@ define-command -params ..1 -docstring "Add the current file to the list at the i
     }
 }
 
-define-command -params 1 -docstring "Remove the file at the specified index" harpoon-remove %{
+define-command -params ..1 -docstring "Remove the file at the specified index" harpoon-remove %{
     lua %arg{1} %{
         local index = args()
         if not index or #index == 0 then
-            kak.set_option("global", "harpoon_buffers" "")
+            kak.set_option("global", "harpoon_buffers")
         else
             kak.set_option("-remove", "global", "harpoon_buffers", index.."=foo")
         end
