@@ -1,6 +1,6 @@
 # harpoon.kak
 
-Quickly switch between your most important Kakoune buffers.
+Quickly switch between your most important Kakoune files.
 
 Based on [Harpoon](https://github.com/ThePrimeagen/harpoon) for Neovim.
 
