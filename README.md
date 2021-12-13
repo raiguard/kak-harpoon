@@ -46,7 +46,7 @@ For example, add your main file with `:harpoon-add 1`, then return to it at any 
 
 You can have as many harpoons as you like, though you shouldn't need more than three or four at a given time.
 
-Call `:harpoon-list` to list all of the harpooned files, and `:harpoon-remove <index>` to remove a harpooned file.
+Call `:harpoon-list` to list all of the harpooned files, and `:harpoon-remove <index>` to remove a harpooned file. You can also call `:harpoon-add-or-nav <index>` to navigate to the given file or add it if it does not exist.
 
 ## Configuration
 
