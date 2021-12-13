@@ -25,8 +25,9 @@ define-command -params 1 -docstring "Navigate to the file at the specified index
 define-command -params ..1 -docstring "Add the current file to the list at the index or at the end" harpoon-add %{
     lua %arg{1} %val{bufname} %opt{harpoon_buffers} %{
         local index, bufname = args()
+        index = tonumber(index) or nil
         -- Index is optional
-        if not index or (type(index) == "string" and #index == 0) then
+        if not index then
             -- Find the lowest available index
             local buffers = {}
             for i = 3, #arg do
@@ -46,10 +47,11 @@ define-command -params ..1 -docstring "Add the current file to the list at the i
 define-command -params ..1 -docstring "Remove the file at the specified index" harpoon-remove %{
     lua %arg{1} %{
         local index = args()
-        if not index or #index == 0 then
-            kak.set_option("global", "harpoon_buffers")
+        index = tonumber(index) or nil
+        if index then
+            kak.set_option("-remove", "global", "harpoon_buffers", index.."=")
         else
-            kak.set_option("-remove", "global", "harpoon_buffers", index.."=foo")
+            kak.set_option("global", "harpoon_buffers")
         end
     }
 }
