@@ -2,7 +2,7 @@ require-module luar
 
 declare-option str-to-str-map harpoon_buffers
 
-define-command -params 1 -docstring "Navigate to the file at the specified index" harpoon-nav %{
+define-command harpoon-nav -params 1 -docstring "Navigate to the file at the specified index" %{
     lua %arg{1} %opt{harpoon_buffers} %{
         -- Parse arguments
         local to_index = args()
@@ -22,7 +22,7 @@ define-command -params 1 -docstring "Navigate to the file at the specified index
     }
 }
 
-define-command -params ..1 -docstring "Add the current file to the list at the index or at the end" harpoon-add %{
+define-command harpoon-add -params ..1 -docstring "Add the current file to the list at the index or at the end" %{
     lua %arg{1} %val{bufname} %opt{harpoon_buffers} %{
         local index, bufname = args()
         index = tonumber(index) or nil
@@ -44,7 +44,7 @@ define-command -params ..1 -docstring "Add the current file to the list at the i
     }
 }
 
-define-command -params ..1 -docstring "Remove the file at the specified index" harpoon-remove %{
+define-command harpoon-remove -params ..1 -docstring "Remove the file at the specified index" %{
     lua %arg{1} %{
         local index = args()
         index = tonumber(index) or nil
@@ -56,7 +56,7 @@ define-command -params ..1 -docstring "Remove the file at the specified index" h
     }
 }
 
-define-command -params 1 -docstring "Add or navigate to the file at the specified index" harpoon-add-or-nav %{
+define-command harpoon-add-or-nav -params 1 -docstring "Add or navigate to the file at the specified index" %{
     lua %arg{1} %opt{harpoon_buffers} %{
         local buffers = {}
         for i = 2, #arg do
@@ -74,7 +74,7 @@ define-command -params 1 -docstring "Add or navigate to the file at the specifie
     }
 }
 
-define-command -docstring "List harpoon files in an infobox" harpoon-list %{
+define-command harpoon-list -docstring "List harpoon files in an infobox" %{
     lua %opt{harpoon_buffers} %{
         if #arg == 0 then
             kak.echo("-markup", "{Error}There are no harpooned files")
@@ -101,7 +101,7 @@ map global harpoon 7 ": harpoon-add 7<ret>" -docstring "Add file to 7"
 map global harpoon 8 ": harpoon-add 8<ret>" -docstring "Add file to 8"
 map global harpoon 9 ": harpoon-add 9<ret>" -docstring "Add file to 9"
 
-define-command -docstring "Add convenient keybindings for navigating harpoons" harpoon-add-bindings  %{
+define-command harpoon-add-bindings -docstring "Add convenient keybindings for navigating harpoons" %{
     map global normal <c-1> ": harpoon-nav 1<ret>"
     map global normal <c-2> ": harpoon-nav 2<ret>"
     map global normal <c-3> ": harpoon-nav 3<ret>"
