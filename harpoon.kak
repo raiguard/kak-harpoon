@@ -10,7 +10,7 @@ define-command harpoon-nav -params 1 -docstring "Navigate to the file at the spe
         for i = 2, #arg do
             local index, bufname = string.match(arg[i], "(%d+)=(.*)")
             index = tonumber(index)
-            table.insert(buffers, index, bufname)
+            buffers[index] = bufname
         end
 
         if buffers[to_index] then
@@ -33,7 +33,7 @@ define-command harpoon-add -params ..1 -docstring "Add the current file to the l
             for i = 3, #arg do
                 local index, bufname = string.match(arg[i], "(%d+)=(.*)")
                 index = tonumber(index)
-                table.insert(buffers, index, bufname)
+                buffers[index] = bufname
             end
             -- This will handle gaps in the list as well, since # will return the first contiguous section
             index = #buffers + 1
@@ -62,7 +62,7 @@ define-command harpoon-add-or-nav -params 1 -docstring "Add or navigate to the f
         for i = 2, #arg do
             local index, bufname = string.match(arg[i], "(%d+)=(.*)")
             index = tonumber(index)
-            table.insert(buffers, index, bufname)
+            buffers[index] = bufname
         end
 
         local index = args()
