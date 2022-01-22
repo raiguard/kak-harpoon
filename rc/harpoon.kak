@@ -1,7 +1,7 @@
 declare-option str-to-str-map harpoon_buffers
 
 define-command harpoon-nav \
--params 1 \
+-params 1..2 \
 -docstring "harpoon-nav <index> [<add-if-empty>]: Navigate to the harpoon at <index>, or optionally add it if it's empty" \
 %{
     evaluate-commands %sh{
