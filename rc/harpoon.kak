@@ -70,7 +70,7 @@ $index: $filename"
             fi
             shift
         done
-        output=$( echo "$output" | sed "s/@/@@/g" | sort)
+        output=$(echo "$output" | sed "s/@/@@/g" | sort)
 
         if [ -n "$output" ]; then
             echo "info -title harpoons %@$output@"
