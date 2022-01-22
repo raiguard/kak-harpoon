@@ -1,105 +1,96 @@
-require-module luar
-
 declare-option str-to-str-map harpoon_buffers
 
-define-command harpoon-nav -params 1 -docstring "Navigate to the file at the specified index" %{
-    lua %arg{1} %opt{harpoon_buffers} %{
-        -- Parse arguments
-        local to_index = args()
-        local buffers = {}
-        for i = 2, #arg do
-            local index, bufname = string.match(arg[i], "(%d+)=(.*)")
-            index = tonumber(index)
-            buffers[index] = bufname
-        end
+define-command harpoon-nav \
+-params 1 \
+-docstring "harpoon-nav <index> [<add-if-empty>]: Navigate to the harpoon at <index>, or optionally add it if it's empty" \
+%{
+    evaluate-commands %sh{
+        selected=$1
+        add=$2
+        eval "set -- $kak_quoted_opt_harpoon_buffers"
+        while [ $# -gt 0 ]; do
+            index=${1%%=*}
+            if [ "$index" = "$selected" ]; then
+                echo "edit ${1#*=}"
+                echo "echo 'Opened harpoon at index $selected'"
+                return
+            fi
+            shift
+        done
 
-        if buffers[to_index] then
-            kak.edit(buffers[to_index])
-            kak.echo("Opened file at index "..to_index)
+        if [ "$add" = true ]; then
+            echo "harpoon-add $selected"
         else
-            kak.echo("-markup", "{Error}No file defined at index "..to_index)
-        end
+            echo "fail 'No harpoon defined at index $selected'"
+        fi
     }
 }
 
-define-command harpoon-add -params ..1 -docstring "Add the current file to the list at the index or at the end" %{
-    lua %arg{1} %val{bufname} %opt{harpoon_buffers} %{
-        local index, bufname = args()
-        index = tonumber(index) or nil
-        -- Index is optional
-        if not index then
-            -- Find the lowest available index
-            local buffers = {}
-            for i = 3, #arg do
-                local index, bufname = string.match(arg[i], "(%d+)=(.*)")
-                index = tonumber(index)
-                buffers[index] = bufname
-            end
-            -- This will handle gaps in the list as well, since # will return the first contiguous section
-            index = #buffers + 1
-        end
-
-        kak.set_option("-add", "global", "harpoon_buffers", index.."="..bufname)
-        kak.echo("Added current file at index "..index)
+define-command harpoon-add \
+-params 1 \
+-docstring "harpoon-add <index>: Harpoon the current file at <index>" \
+%{
+    evaluate-commands %sh{
+        bufname=$(echo "$kak_bufname" | sed "s/@/@@/g")
+        echo "set-option -add global harpoon_buffers %@$1=$bufname@"
+        echo "echo 'Added current file at index $1'"
     }
 }
 
-define-command harpoon-remove -params ..1 -docstring "Remove the file at the specified index" %{
-    lua %arg{1} %{
-        local index = args()
-        index = tonumber(index) or nil
-        if index then
-            kak.set_option("-remove", "global", "harpoon_buffers", index.."=")
+define-command harpoon-remove \
+-params ..1 \
+-docstring "harpoon-remove [<index>]: Remove the harpoon at <index>, or all harpoons" \
+%{
+    evaluate-commands %sh{
+        if [ -n "$1" ]; then
+            echo "set-option -remove global harpoon_buffers '$1='"
+            echo "Removed harpoon at index $1"
         else
-            kak.set_option("global", "harpoon_buffers")
-        end
+            echo "set-option global harpoon_buffers"
+            echo "Removed all harpoons"
+        fi
     }
 }
 
-define-command harpoon-add-or-nav -params 1 -docstring "Add or navigate to the file at the specified index" %{
-    lua %arg{1} %opt{harpoon_buffers} %{
-        local buffers = {}
-        for i = 2, #arg do
-            local index, bufname = string.match(arg[i], "(%d+)=(.*)")
-            index = tonumber(index)
-            buffers[index] = bufname
-        end
+define-command harpoon-list \
+-docstring "List harpoons in an infobox" \
+%{
+    evaluate-commands %sh{
+        output=""
+        eval "set -- $kak_quoted_opt_harpoon_buffers"
+        while [ $# -gt 0 ]; do
+            index=${1%%=*}
+            filename=${1#*=}
+            # Add newline if it's not the first one
+            if [ -n "$output" ]; then
+                output="$output
+$index: $filename"
+            else
+                output="$index: $filename"
+            fi
+            shift
+        done
+        output=$( echo "$output" | sed "s/@/@@/g" | sort)
 
-        local index = args()
-        if buffers[index] then
-            kak.harpoon_nav(index)
+        if [ -n "$output" ]; then
+            echo "info -title harpoons %@$output@"
         else
-            kak.harpoon_add(index)
-        end
-    }
-}
-
-define-command harpoon-list -docstring "List harpoon files in an infobox" %{
-    lua %opt{harpoon_buffers} %{
-        if #arg == 0 then
-            kak.echo("-markup", "{Error}There are no harpooned files")
-        else
-            local output = {}
-            for i, file in pairs(arg) do
-                output[i] = string.gsub(file, "=", ": ")
-            end
-            kak.info("-title", "harpoons", table.concat(output, "\n"))
-        end
+            echo "fail 'There are no harpoons'"
+        fi
     }
 }
 
 declare-user-mode harpoon
-map global harpoon a ": harpoon-add<ret>" -docstring "Add file to end"
-map global harpoon l ": harpoon-list<ret>" -docstring "List files"
-map global harpoon 1 ": harpoon-add 1<ret>" -docstring "Add file to 1"
-map global harpoon 2 ": harpoon-add 2<ret>" -docstring "Add file to 2"
-map global harpoon 3 ": harpoon-add 3<ret>" -docstring "Add file to 3"
-map global harpoon 4 ": harpoon-add 4<ret>" -docstring "Add file to 4"
-map global harpoon 5 ": harpoon-add 5<ret>" -docstring "Add file to 5"
-map global harpoon 6 ": harpoon-add 6<ret>" -docstring "Add file to 6"
-map global harpoon 7 ": harpoon-add 7<ret>" -docstring "Add file to 7"
-map global harpoon 8 ": harpoon-add 8<ret>" -docstring "Add file to 8"
-map global harpoon 9 ": harpoon-add 9<ret>" -docstring "Add file to 9"
+map global harpoon l ": harpoon-list<ret>" -docstring "List harpoons"
+map global harpoon 1 ": harpoon-add 1<ret>" -docstring "Add file at 1"
+map global harpoon 2 ": harpoon-add 2<ret>" -docstring "Add file at 2"
+map global harpoon 3 ": harpoon-add 3<ret>" -docstring "Add file at 3"
+map global harpoon 4 ": harpoon-add 4<ret>" -docstring "Add file at 4"
+map global harpoon 5 ": harpoon-add 5<ret>" -docstring "Add file at 5"
+map global harpoon 6 ": harpoon-add 6<ret>" -docstring "Add file at 6"
+map global harpoon 7 ": harpoon-add 7<ret>" -docstring "Add file at 7"
+map global harpoon 8 ": harpoon-add 8<ret>" -docstring "Add file at 8"
+map global harpoon 9 ": harpoon-add 9<ret>" -docstring "Add file at 9"
 
 define-command harpoon-add-bindings -docstring "Add convenient keybindings for navigating harpoons" %{
     map global normal <c-1> ": harpoon-nav 1<ret>"
