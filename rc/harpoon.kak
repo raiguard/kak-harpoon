@@ -44,10 +44,10 @@ define-command harpoon-remove \
     evaluate-commands %sh{
         if [ -n "$1" ]; then
             echo "set-option -remove global harpoon_buffers '$1='"
-            echo "Removed harpoon at index $1"
+            echo "echo 'Removed harpoon at index $1'"
         else
             echo "set-option global harpoon_buffers"
-            echo "Removed all harpoons"
+            echo "echo 'Removed all harpoons'"
         fi
     }
 }
