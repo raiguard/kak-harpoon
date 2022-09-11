@@ -1,4 +1,4 @@
-# harpoon.kak
+# kak-harpoon
 
 Quickly switch between your most important Kakoune files.
 
@@ -6,27 +6,7 @@ Based on [Harpoon](https://github.com/ThePrimeagen/harpoon) for Neovim.
 
 ## Installation
 
-### [plug.kak](https://github.com/andreyorst/plug.kak)
-
-```kak
-plug "raiguard/harpoon.kak" %{
-    # Add default keybindings
-    harpoon-add-bindings
-}
-```
-
-### [cork.kak](https://github.com/topisani/cork.kak)
-
-```kak
-cork harpoon.kak "https://github.com/raiguard/harpoon.kak" %{
-    # Add default keybindings
-    harpoon-add-bindings
-}
-```
-
-### Manually
-
-Stick `harpoon.kak` in your autoload or source it manually.
+Source `harpoon.kak` in your `kakrc`, or use a plugin manager.
 
 ## Usage
 
