@@ -12,9 +12,9 @@ Source `harpoon.kak` in your `kakrc`, or use a plugin manager.
 
 > Assumes that you are using the default keybindings by calling `harpoon-add-bindings`.
 
-Harpoon files by calling `:harpoon-add <index>` or via the user mode (see `Configuration`). Harpooned files are accessible by calling `:harpoon-nav <index>` or by pressing `<c-<index>>`.
+Harpoon files by calling `:harpoon-add <index>` or via the user mode (see `Configuration`). Harpooned files are accessible by calling `:harpoon-nav <index>` or by pressing `<a-<index>>`.
 
-For example, add your main file with `:harpoon-add 1`, then return to it at any time by pressing `<c-1>`.
+For example, add your main file with `:harpoon-add 1`, then return to it at any time by pressing `<a-1>`.
 
 You can have as many harpoons as you like, though you shouldn't need more than three or four at a given time.
 
