@@ -35,7 +35,7 @@ define-command harpoon-nav -params 1 -docstring "harpoon-nav <index>: navigate t
   }
 }
 
-define-command harpoon-show-list %{
+define-command harpoon-show-list -docstring "harpoon-show-list: show all harpoons in the *harpoons* buffer" %{
   evaluate-commands -save-regs dquote %{
     try %{
       set-register dquote %opt{harpoon_files}

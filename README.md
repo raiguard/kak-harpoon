@@ -4,6 +4,8 @@ Quickly save and switch between your most important Kakoune files.
 
 Inspired by [Harpoon](https://github.com/ThePrimeagen/harpoon) for Neovim.
 
+[![asciicast](https://asciinema.org/a/MH4yLhuW5y4ryWQRxz7VZxD4Q.svg)](https://asciinema.org/a/MH4yLhuW5y4ryWQRxz7VZxD4Q)
+
 ## Installation
 
 Source `harpoon.kak` in your `kakrc`, or use a plugin manager.
