@@ -50,11 +50,15 @@ define-command harpoon-show-list -docstring "harpoon-show-list: show all harpoon
 
 define-command -hidden harpoon-update-from-list %{
   evaluate-commands -save-regs dquote %{
-    execute-keys -draft -save-regs '' '%<a-s><a-k>^\d*:<ret><a-;>;wl<a-l>y'
-    evaluate-commands %sh{
-      echo "set-option global harpoon_files $kak_quoted_reg_dquote"
+    try %{
+      execute-keys -draft -save-regs '' '%<a-s><a-k>^\d*:<ret><a-;>;wl<a-l>y'
+      evaluate-commands %sh{
+        echo "set-option global harpoon_files $kak_quoted_reg_dquote"
+      }
+      harpoon-show-list
+    } catch %{
+      set-option global harpoon_files
     }
-    harpoon-show-list
     echo "Updated harpoons"
   }
 }
