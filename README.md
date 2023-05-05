@@ -1,8 +1,8 @@
 # kak-harpoon
 
-Quickly switch between your most important Kakoune files.
+Quickly save and switch between your most important Kakoune files.
 
-Based on [Harpoon](https://github.com/ThePrimeagen/harpoon) for Neovim.
+Inspired by [Harpoon](https://github.com/ThePrimeagen/harpoon) for Neovim.
 
 ## Installation
 
@@ -10,36 +10,28 @@ Source `harpoon.kak` in your `kakrc`, or use a plugin manager.
 
 ## Usage
 
-> Assumes that you are using the default keybindings by calling `harpoon-add-bindings`.
+Call `harpoon-add-bindings` to add the default keybindings:
 
-Harpoon files by calling `:harpoon-add <index>` or via the user mode (see `Configuration`). Harpooned files are accessible by calling `:harpoon-nav <index>` or by pressing `<a-<index>>`.
+- `<user>h`: Harpoon the current file
+- `<user>H`: View harpoons list
+- `<a-1>`: Navigate to the harpoon at position 1
+- `<a-2>`: Navigate to the harpoon at position 2
+- ...and so on up through `<a-9>`.
 
-For example, add your main file with `:harpoon-add 1`, then return to it at any time by pressing `<a-1>`.
+The harpoons list is an interactive buffer listing all of your current
+harpoons. You can freely edit or reorder this file, then call `write` to save
+it. The new order / contents will be set as your new harpoons. Press `<esc>` to
+close the harpoons list.
 
-You can have as many harpoons as you like, though you shouldn't need more than three or four at a given time.
+## Customization
 
-Call `:harpoon-list` to list all of the harpooned files, and `:harpoon-remove <index>` to remove a harpooned file. You can also call `:harpoon-add-or-nav <index>` to navigate to the given file or add it if it does not exist.
+If the default bindings do not work for you, here are the relevant commands to call:
 
-## Configuration
+- `harpoon-add`: Harpoon the current file
+- `harpoon-nav <index>`: Navigate to the harpoon at `<index>`
+- `harpoon-show-list`: View the harpoons list
 
-The plugin provides a `harpoon` user mode:
+## TODO
 
-```kak
-map global harpoon l ": harpoon-list<ret>" -docstring "List files"
-map global harpoon 1 ": harpoon-add 1<ret>" -docstring "Add file to 1"
-map global harpoon 2 ": harpoon-add 2<ret>" -docstring "Add file to 2"
-map global harpoon 3 ": harpoon-add 3<ret>" -docstring "Add file to 3"
-map global harpoon 4 ": harpoon-add 4<ret>" -docstring "Add file to 4"
-map global harpoon 5 ": harpoon-add 5<ret>" -docstring "Add file to 5"
-map global harpoon 6 ": harpoon-add 6<ret>" -docstring "Add file to 6"
-map global harpoon 7 ": harpoon-add 7<ret>" -docstring "Add file to 7"
-map global harpoon 8 ": harpoon-add 8<ret>" -docstring "Add file to 8"
-map global harpoon 9 ": harpoon-add 9<ret>" -docstring "Add file to 9"
-```
-
-Calling `harpoon-add-bindings` will make this accessible via `,h`, and will add the `<c-<index>>` bindings for quick jumping in normal mode.
-
-## Roadmap
-
+- Save line and column information
 - Persist harpoons per-session
-- Add interactive harpoons buffer for reordering and deletion
