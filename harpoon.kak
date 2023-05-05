@@ -2,13 +2,12 @@ declare-option str-list harpoon_files
 
 define-command harpoon-add -docstring "harpoon-add: Add the current file to the list of harpoons" %{
   evaluate-commands %sh{
-    bufname="$kak_bufname"
     eval set -- "$kak_quoted_opt_harpoon_files"
     index=0
     while [ $# -gt 0 ]; do
       index=$(($index + 1))
-      if [ "$1" = "$bufname" ]; then
-        echo "fail %{'$bufname' is already harpooned at index $index}"
+      if [ "$1" = "$kak_bufname" ]; then
+        echo "fail %{$kak_quoted_bufname is already harpooned at index $index}"
         return
       fi
       shift
@@ -16,7 +15,7 @@ define-command harpoon-add -docstring "harpoon-add: Add the current file to the 
     index=$(($index + 1))
     printf "%s\\n" "
       set-option -add global harpoon_files $kak_quoted_bufname
-      echo '$index: $bufname'
+      echo '$index: $kak_bufname'
     "
   }
 }

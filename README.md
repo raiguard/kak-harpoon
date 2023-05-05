@@ -33,7 +33,7 @@ If the default bindings do not work for you, here are the relevant commands to c
 - `harpoon-nav <index>`: Navigate to the harpoon at `<index>`
 - `harpoon-show-list`: View the harpoons list
 
-## TODO
+## Roadmap
 
 - Save line and column information
 - Persist harpoons per-session
