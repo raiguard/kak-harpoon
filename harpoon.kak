@@ -52,9 +52,7 @@ define-command -hidden harpoon-update-from-list %{
   evaluate-commands -save-regs dquote %{
     try %{
       execute-keys -draft -save-regs '' '%<a-s><a-k>^\d*:<ret><a-;>;wl<a-l>y'
-      evaluate-commands %sh{
-        echo "set-option global harpoon_files $kak_quoted_reg_dquote"
-      }
+      set-option global harpoon_files %reg{dquote}
       harpoon-show-list
     } catch %{
       set-option global harpoon_files
