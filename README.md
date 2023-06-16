@@ -36,4 +36,3 @@ If the default bindings do not work for you, here are the relevant commands to c
 ## Roadmap
 
 - Save line and column information
-- Persist harpoons per-session

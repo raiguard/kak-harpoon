@@ -83,3 +83,28 @@ hook global BufCreate \*harpoon\* %{
   alias buffer w harpoon-update-from-list
   add-highlighter buffer/harpoon-indices regex ^\d: 0:function
 }
+
+# State saving - save by PWD and git branch, if any
+
+declare-option str harpoon_state_file %sh{
+  git_branch=$(git -C "${kak_buffile%/*}" rev-parse --abbrev-ref HEAD 2>/dev/null)
+  state_file=$(printf "%s" "$PWD-$git_branch" | sed -e 's|_|__|g' -e 's|/|_-|g')
+  state_dir=${XDG_STATE_HOME:-~/.local/state}/kak/harpoon
+  mkdir -p $state_dir
+  echo $state_dir/$state_file
+}
+
+hook global KakBegin .* %{
+  evaluate-commands %sh{
+    if [ -f "$kak_opt_harpoon_state_file" ]; then
+      printf "set-option global harpoon_files "
+      cat "$kak_opt_harpoon_state_file"
+    fi
+  }
+}
+
+hook global KakEnd .* %{
+  evaluate-commands %sh{
+    printf "$kak_quoted_opt_harpoon_files" > "$kak_opt_harpoon_state_file"
+  }
+}
