@@ -105,6 +105,10 @@ hook global KakBegin .* %{
 
 hook global KakEnd .* %{
   evaluate-commands %sh{
+    if [ -z "$kak_quoted_opt_harpoon_files" ]; then
+      rm -f "$kak_opt_harpoon_state_file"
+      exit
+    fi
     printf "$kak_quoted_opt_harpoon_files" > "$kak_opt_harpoon_state_file"
   }
 }
