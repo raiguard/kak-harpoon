@@ -1,6 +1,8 @@
 # kak-harpoon
 
-Quickly save and switch between your most important Kakoune files.
+Quickly save and switch between your most important Kakoune files. Harpoons are
+saved on editor shutdown and are restored depending on the current working
+directory and active Git branch of the session.
 
 Inspired by [Harpoon](https://github.com/ThePrimeagen/harpoon) for Neovim.
 
