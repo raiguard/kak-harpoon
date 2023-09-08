@@ -24,7 +24,7 @@ define-command harpoon-nav -params 1 -docstring "harpoon-nav <index>: navigate t
   evaluate-commands %sh{
     index=$1
     eval set -- "$kak_quoted_opt_harpoon_files"
-    eval "bufname=\$$index"
+    eval "bufname=\${$index}"
     if [ -n "$bufname" ]; then
       echo "edit '$bufname'"
       echo "echo '$index: $bufname'"
