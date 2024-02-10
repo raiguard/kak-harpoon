@@ -86,15 +86,9 @@ hook global BufCreate \*harpoon\* %{
 
 # State saving - save by PWD and git branch, if any
 
-declare-option str harpoon_state_file %sh{
-  git_branch=$(git -C "${kak_buffile%/*}" rev-parse --abbrev-ref HEAD 2>/dev/null)
-  state_file=$(printf "%s" "$PWD-$git_branch" | sed -e 's|_|__|g' -e 's|/|_-|g')
-  state_dir=${XDG_STATE_HOME:-~/.local/state}/kak/harpoon
-  mkdir -p $state_dir
-  echo $state_dir/$state_file
-}
+declare-option str harpoon_state_file
 
-hook global KakBegin .* %{
+define-command -hidden harpoon-load %{
   evaluate-commands %sh{
     if [ -f "$kak_opt_harpoon_state_file" ]; then
       printf "set-option global harpoon_files "
@@ -103,8 +97,11 @@ hook global KakBegin .* %{
   }
 }
 
-hook global KakEnd .* %{
+define-command -hidden harpoon-save %{
   evaluate-commands %sh{
+    if [ -z "$kak_opt_harpoon_state_file" ]; then
+      exit
+    fi
     if [ -z "$kak_quoted_opt_harpoon_files" ]; then
       rm -f "$kak_opt_harpoon_state_file"
       exit
@@ -112,3 +109,24 @@ hook global KakEnd .* %{
     printf "$kak_quoted_opt_harpoon_files" > "$kak_opt_harpoon_state_file"
   }
 }
+
+define-command -hidden harpoon-check %{
+  evaluate-commands %sh{
+    git_branch=$(git -C "${kak_buffile%/*}" rev-parse --abbrev-ref HEAD 2>/dev/null)
+    state_file=$(printf "%s" "$PWD-$git_branch" | sed -e 's|_|__|g' -e 's|/|_-|g')
+    state_dir=${XDG_STATE_HOME:-~/.local/state}/kak/harpoon
+    state_path="$state_dir/$state_file"
+    if [ "$state_path" != "$kak_opt_harpoon_state_file" ]; then
+      mkdir -p "$state_dir"
+      printf "%s\\n" "
+        harpoon-save
+        set-option global harpoon_state_file '$state_path'
+        harpoon-load
+      "
+    fi
+  }
+}
+
+hook global FocusIn .* harpoon-check
+hook global WinDisplay .* harpoon-check
+hook global KakEnd .* harpoon-save
