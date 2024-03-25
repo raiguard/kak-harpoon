@@ -112,6 +112,10 @@ define-command -hidden harpoon-save %{
 
 define-command -hidden harpoon-check %{
   evaluate-commands %sh{
+    # Ignore scratch files
+    if [ -z "${kak_buffile%\**\*}" ]; then
+      exit
+    fi
     git_branch=$(git -C "${kak_buffile%/*}" rev-parse --abbrev-ref HEAD 2>/dev/null)
     state_file=$(printf "%s" "$PWD-$git_branch" | sed -e 's|_|__|g' -e 's|/|_-|g')
     state_dir=${XDG_STATE_HOME:-~/.local/state}/kak/harpoon
