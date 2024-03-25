@@ -8,7 +8,7 @@ define-command harpoon-add -docstring "harpoon-add: Add the current file to the 
       index=$(($index + 1))
       if [ "$1" = "$kak_bufname" ]; then
         echo "fail %{$kak_quoted_bufname is already harpooned at index $index}"
-        return
+        exit
       fi
       shift
     done
