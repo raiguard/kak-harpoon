@@ -1,3 +1,5 @@
+# This project has migrated to [Codeberg](https://codeberg.org/raiguard/kak-harpoon).
+
 # kak-harpoon
 
 Quickly save and switch between your most important Kakoune files. Harpoons are
