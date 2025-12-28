@@ -134,3 +134,8 @@ define-command -hidden harpoon-check %{
 hook global FocusIn .* harpoon-check
 hook global WinDisplay .* harpoon-check
 hook global KakEnd .* harpoon-save
+
+hook -once global NormalIdle .* %{
+  echo -debug "WARNING: kak-harpoon has moved to https://codeberg.org/raiguard/kak-harpoon. Please update your plugin configuration."
+  echo -markup "{Error}WARNING:{default} kak-harpoon has moved to https://codeberg.org/raiguard/kak-harpoon. Please update your plugin configuration."
+}
